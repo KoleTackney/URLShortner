@@ -7,6 +7,7 @@ import { NextRequest } from "next/server";
 
 export async function GET(request: NextRequest) {
     //Expect request to provide us a alpha numeric string
+    console.log("begging of request");
     const { searchParams } = new URL(request.url);
     //check DB for id
     if (!searchParams.has('id')) {
@@ -14,6 +15,7 @@ export async function GET(request: NextRequest) {
     }
     const id = Number.parseInt(searchParams.get('id')!);
     const urls = await db.select().from(URLTable).where(eq(URLTable.id, id));
+    console.log("end of request, sending response");
     return urls[0].url;
 }
 
