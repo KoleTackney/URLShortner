@@ -1,16 +1,12 @@
 import React, { Component } from "react";
 
-const BASE_URL = "http://localhost:3000";
+interface DisplayURLProps {
+  url: string;
+  urlID: string;
+}
 
-export default function DisplayURL(
-  { url, urlID }: { url: string; urlID: string },
-) {
-  async function addItem(url: string) {
-    const res = await fetch(url);
-    if (!res.ok) {
-      throw new Error("Invalid URL");
-    }
-  }
+export default function DisplayURL({ url, urlID }: DisplayURLProps) {
+  const BASE_URL = window.location.origin;
 
   return (
     <div className="flex flex-col items-center justify-center">
