@@ -7,19 +7,22 @@
 "use client";
 import React from "react";
 import DisplayUrl from "./components/displayURL";
-
-// put this an api endpoint wimport { db } from "@/db";
+import { createNewURL } from "./lib/urlManager";
 
 export default function Home() {
   const [url, setUrl] = React.useState("");
+  const [urlID, setUrlID] = React.useState("");
 
-  function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
-    console.log("fetching...");
-    fetch("/api/url", {});
-    console.log("fetched");
+  async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
-    const formData = new FormData(e.currentTarget);
-    setUrl(formData.get("URL")?.toString() || "");
+    const urlx = e.currentTarget.URL.value;
+    if (!urlx) {
+      alert("Please enter a URL");
+      return;
+    }
+    const res = await createNewURL(urlx);
+    setUrl(res.URL!);
+    setUrlID(res.urlID);
   }
 
   return (
@@ -41,7 +44,7 @@ export default function Home() {
           Shorten
         </button>
       </form>
-      {url && <DisplayUrl url={url} />}
+      {url && <DisplayUrl url={url} urlID={urlID} />}
     </main>
   );
 }

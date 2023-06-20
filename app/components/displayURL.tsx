@@ -1,20 +1,15 @@
 import React, { Component } from "react";
 
-export default function DisplayURL({ url }: { url: string }) {
-  async function addItem(url: string) {
-    //"use server";
+const BASE_URL = "http://localhost:3000";
 
-    //Check if URL is valid
+export default function DisplayURL(
+  { url, urlID }: { url: string; urlID: string },
+) {
+  async function addItem(url: string) {
     const res = await fetch(url);
     if (!res.ok) {
       throw new Error("Invalid URL");
     }
-
-    //Check if URL is already in database
-
-    //Add URL to database
-
-    //Return shortened URL
   }
 
   return (
@@ -24,9 +19,9 @@ export default function DisplayURL({ url }: { url: string }) {
       </h1>
       <a
         className="text-6xl font-bold text-center"
-        href={url}
+        href={new URL(urlID, BASE_URL).toString()}
       >
-        {url}
+        {new URL(urlID, BASE_URL).toString()}
       </a>
     </div>
   );

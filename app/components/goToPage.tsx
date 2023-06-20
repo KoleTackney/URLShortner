@@ -2,9 +2,18 @@
 
 import { useRouter } from "next/navigation";
 
-export default function GoToPage({ url }: { url: string }) {
+export function GoToPage({ url }: { url: string }) {
   const router = useRouter();
-  router.push(url);
+  const onClick = () => {
+    router.replace(url); // Do we want to replace the current page in the history stack or add a new one?
+  };
 
-  return <div>Going to page: {url}</div>;
+  return (
+    <button
+      className="bg-violet-300 border-red-500 border px-5 py-3 m-5 rounded-xl"
+      onClick={onClick}
+    >
+      Proceed
+    </button>
+  );
 }
