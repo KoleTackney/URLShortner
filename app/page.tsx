@@ -8,21 +8,34 @@
 import React from "react";
 import DisplayUrl from "./components/displayURL";
 import { createNewURL } from "./lib/urlManager";
+import { z } from "zod";
+
+type shortURL = {
+  URL: string;
+  urlID: string;
+};
 
 export default function Home() {
-  const [url, setUrl] = React.useState("");
-  const [urlID, setUrlID] = React.useState("");
+  const [urlList, setUrlList] = React.useState(new Array<shortURL>());
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
-    const urlx = e.currentTarget.URL.value;
-    if (!urlx) {
-      alert("Please enter a URL");
+    const result = z.string().max(256, {
+      message: "URL too large, max character length is currently 256",
+    }).url()
+      .safeParse(
+        e.currentTarget.URL.value,
+      );
+    if (!result.success) {
+      const errorMessage = result.error.issues[0].message;
+      alert(errorMessage);
       return;
     }
-    const res = await createNewURL(urlx);
-    setUrl(res.URL!);
-    setUrlID(res.urlID);
+
+    //Add to database, display shortened URL
+    const res = await createNewURL(result.data);
+    const newURL = { URL: res.URL!, urlID: res.urlID };
+    setUrlList([...urlList, newURL]);
   }
 
   return (
@@ -44,7 +57,15 @@ export default function Home() {
           Shorten
         </button>
       </form>
-      {url && <DisplayUrl url={url} urlID={urlID} />}
+      {urlList.length > 0 && ( // If there are shortened URLs, display them
+        <h1 className="text-6xl font-bold text-center">
+          Your shortened URLs are:
+        </h1>
+      )}
+      {urlList.length > 0 &&
+        urlList.map((short) => (
+          <DisplayUrl key={short.urlID} url={short.URL} urlID={short.urlID} />
+        ))}
     </main>
   );
 }

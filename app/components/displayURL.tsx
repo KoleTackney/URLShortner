@@ -19,9 +19,6 @@ export default function DisplayURL({ url, urlID }: DisplayURLProps) {
 
   return (
     <div className="flex flex-col items-center justify-center">
-      <h1 className="text-6xl font-bold text-center">
-        Your shortened URL is:
-      </h1>
       <div className="bg-slate-800 bg-opacity-50 p-2 m-5 space-x-5 flex flex-row justify-center items-center border-2 rounded-lg">
         <div className="flex flex-col items-start m-2">
           <div className="flex space-x-5">
